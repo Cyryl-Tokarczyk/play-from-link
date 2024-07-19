@@ -6,7 +6,7 @@ const linkPrefix = ref('')
 const link = ref('');
 
 const isCORSProxyEnabled = ref(true)
-const isPrefixEnabled = ref(false)
+const isPrefixEnabled = ref(true)
 
 const audioURL = ref('')
 // const audioBeforeConversionURL = ref('')
@@ -85,7 +85,14 @@ async function convertFile(url) {
 async function playSound() {
   if (link.value) {
     try {
-      audioURL.value = await convertFile(link.value);
+      let fullLink = ''
+      if (isPrefixEnabled.value) {
+        fullLink = linkPrefix.value + link.value
+      } else {
+        fullLink = link.value
+      }
+
+      audioURL.value = await convertFile(fullLink);
       console.log(audioURL.value);
     } catch (error) {
       errorMessage.value('Failed to convert')
