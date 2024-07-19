@@ -27,3 +27,12 @@ npm run serve
 ```
 npm run build
 ```
+
+### Dependencies
+
+@ffmpeg/ffmpeg
+
+Install with
+```
+npm install [DEPENDENCY]
+```
