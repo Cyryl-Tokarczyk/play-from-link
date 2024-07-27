@@ -11,6 +11,8 @@ const isPrefixEnabled = ref(true)
 const audioURL = ref('')
 // const audioBeforeConversionURL = ref('')
 
+const succesMessage = ref('')
+const infoMessage = ref('')
 const errorMessage = ref('')
 
 const ffmpeg = new FFmpeg()
@@ -85,6 +87,8 @@ async function convertFile(url) {
 async function playSound() {
   if (link.value) {
     try {
+      infoMessage.value = 'Downloading the file...'
+
       let fullLink = ''
       if (isPrefixEnabled.value) {
         fullLink = linkPrefix.value + link.value
@@ -93,7 +97,9 @@ async function playSound() {
       }
 
       audioURL.value = await convertFile(fullLink);
+
       console.log(audioURL.value);
+      succesMessage.value = 'File ready!'
     } catch (error) {
       errorMessage.value('Failed to convert')
       console.log('Error converting or playing the audio:', error);
@@ -102,6 +108,10 @@ async function playSound() {
     errorMessage.value = 'Please provide a valid URL'
     console.log('Please provide a valid URL.');
   }
+  infoMessage.value = ''
+  setTimeout(function() {
+    succesMessage.value = ''
+  }, 10000)
 }
 
 function downloadFile() {
@@ -128,6 +138,12 @@ function downloadFile() {
     </div>
     <div id="error-message" v-if="errorMessage != ''">
       <p>{{ errorMessage }}</p>
+    </div>
+    <div id="info-message" v-if="infoMessage != ''">
+      <p>{{ infoMessage }}</p>
+    </div>
+    <div id="succes-message" v-if="succesMessage != ''">
+      <p>{{ succesMessage }}</p>
     </div>
     <audio controls :src="audioURL" />
   </form>
@@ -167,8 +183,20 @@ input, button, audio {
   font-size: 15px;
 }
 
+#error-massage, #info-message, #succes-message {
+  margin-bottom: -10px;
+}
+
 #error-message {
   color: red;
+}
+
+#info-message {
+  color: darkorange;
+}
+
+#succes-message {
+  color: green;
 }
 
 </style>
